@@ -1,6 +1,7 @@
 drop database if exists ticketSystem;
 CREATE DATABASE ticketSystem;
 USE ticketSystem;
+GRANT ALL PRIVILEGES ON ticketsystem. * TO 'maija'@'localhost';
 
 CREATE TABLE tickets (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -25,6 +26,8 @@ CREATE TABLE tickets (
    insert into tickets (`name`,title, descript, `status`)
 			values ('Jānis', 'test', 'test', 'New');
    select * from tickets;
+   
+   
     
    -- insert into actions (ticketID)
 		-- values ('1');
