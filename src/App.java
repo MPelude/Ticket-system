@@ -21,7 +21,24 @@ public class App {
                 case 1:
                     break;
                 case 2:
+
+                    ResultSet resultSet = statement.executeQuery(
+                            "SELECT id, `name`, title, descript, status" + " FROM tickets" + " ORDER BY id;");
+                    System.out.println();
+                    System.out.println("Ticket list: ");
+                    while (resultSet.next()) {
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("name");
+                        String title = resultSet.getString("title");
+                        String descript = resultSet.getString("descript");
+                        String status = resultSet.getString("status");
+
+                        System.out.println(
+                                id + " '" + name + "' - " + title + " -  " + descript + " - Status: " + status);
+                    }
+                    System.out.println();
                     break;
+
                 case 3:
                     break;
                 case 4:
