@@ -8,25 +8,27 @@ CREATE TABLE tickets (
   title VARCHAR(45) NOT NULL,
   descript VARCHAR(45) NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` ENUM('New', 'In processing', 'Resolved') NOT NULL DEFAULT 'New'
+  resolution TIMESTAMP,
+ `status` ENUM('New', 'In processing', 'Resolved') NOT NULL DEFAULT 'New'
 );
 
-CREATE TABLE actions (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  ticketID INT UNSIGNED NOT NULL,
-  FOREIGN KEY (ticketID) REFERENCES tickets (id),
-  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-   );
+-- CREATE TABLE statuses (
+ --  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  -- ticketID INT UNSIGNED NOT NULL,
+  -- FOREIGN KEY (ticketID) REFERENCES tickets (id),
+  -- `status` ENUM('New', 'In processing', 'Resolved') NOT NULL DEFAULT 'New',
+  -- `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+   -- );
    
    select * from tickets;
-   select * from actions;
+   -- select * from actions;
    insert into tickets (`name`,title, descript, `status`)
-   values ('Jānis', 'test', 'test', 'New');
-    select * from tickets;
+			values ('Jānis', 'test', 'test', 'New');
+   select * from tickets;
     
-    insert into actions (ticketID)
-   values ('1');
-     select * from actions;
+   -- insert into actions (ticketID)
+		-- values ('1');
+	-- select * from actions;
     
    
   
