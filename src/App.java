@@ -7,8 +7,7 @@ public class App {
         Connection conn = DriverManager.getConnection(connectionString);
         Statement statement = conn.createStatement();
 
-        try {
-            Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Please choose from options below:");
             System.out.println();
             System.out.println("1 - Create new ticket");
