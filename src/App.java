@@ -8,6 +8,7 @@ public class App {
         Statement statement = conn.createStatement();
 
         try (Scanner scanner = new Scanner(System.in)) {
+
             System.out.println("Please choose from options below:");
             System.out.println();
             System.out.println("1 - Create new ticket");
@@ -98,12 +99,42 @@ public class App {
                 }
 
             } else if (option == 4) {
-            } else if (option == 5) {
+                // reolution time
+                ResultSet resultSet3 = statement.executeQuery(
+                        "SELECT id, (IFNULL(resolution, CURRENT_TIMESTAMP()) - created) AS resolutionTime FROM tickets;");
+                    while (resultSet3.next()) {
+                        int id = resultSet3.getInt("id");
+                        Timestamp resolutionTime = resultSet3.getTimestamp("resolutionTime");
 
+                System.out.println(id + " '" + resolutionTime);
+
+                // statusi
+                ResultSet resultset2 = statement.executeQuery("SELECT status, COUNT(*) FROM tickets GROUP BY status;");
+                while (resultset2.next()) {
+                    String status = resultset2.getString("status");
+                    int count = resultset2.getInt("COUNT(*)");
+                    System.out.println(status + " " + count);
+                }
+
+                ResultSet resultset4 = statement.executeQuery("SELECT COUNT(*) FROM tickets;");
+                while (resultset4.next()) {
+                    int count = resultset4.getInt("COUNT(*)");
+                    System.out.println("Total ticket count:" + " " + count);
+                }
+
+            } else if (option == 5) {
+                System.out.println("Thank you for using this ticket system!");
+                System.exit(0);
             }
-        } catch (Exception e) {
+
+        }
+
+        catch (
+
+        Exception e) {
             System.out.println("Something went wrong.");
             System.out.println(e.getMessage());
         }
+
     }
 }
