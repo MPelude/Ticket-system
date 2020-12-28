@@ -3,7 +3,15 @@ import java.sql.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String connectionString = "jdbc:mysql://localhost/ticketsystem?user=maija&password=vija";
+        String connectionUsername = System.getenv("MYSQL_USERNAME");
+        if (connectionUsername == null) {
+            connectionUsername = "maija";
+        }
+        String connectionPassword = System.getenv("MYSQL_PASSWORD");
+        if (connectionPassword == null) {
+            connectionPassword = "vija";
+        }
+        String connectionString = "jdbc:mysql://localhost/ticketsystem?user=" + connectionUsername + "&password=" + connectionPassword;
         Connection conn = DriverManager.getConnection(connectionString);
         Statement statement = conn.createStatement();
 
