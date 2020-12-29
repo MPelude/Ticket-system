@@ -116,7 +116,7 @@ public class App {
                     int countOfStatus = resultset2.getInt("COUNT(*)");
                     System.out.println("Total tickets " + "'" + status + "'" + " " + countOfStatus);
                     if (resultset2.getString("status").equals("Resolved")) {
-                        resolvedcount++;
+                        resolvedcount = countOfStatus;
                     }
                 }
                 // resolution time
