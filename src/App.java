@@ -19,6 +19,7 @@ public class App {
             int option = Integer.parseInt(scanner.nextLine(), 10);
 
             if (option == 1) {
+                // ticket creation
                 System.out.println("Please enter your name and press<enter>: ");
                 String name = scanner.nextLine();
 
@@ -40,7 +41,7 @@ public class App {
                         + "', '" + title + "', '" + descript + "', '" + status + "')");
 
             } else if (option == 2) {
-
+                // ticket lst
                 ResultSet resultSet = statement
                         .executeQuery("SELECT id, `name`, title, descript, status" + " FROM tickets" + " ORDER BY id;");
                 System.out.println();
@@ -55,8 +56,9 @@ public class App {
                     System.out.println(id + " '" + name + "' - " + title + " -  " + descript + " - Status: " + status);
                 }
                 System.out.println();
-            } else if (option == 3) {
 
+            } else if (option == 3) {
+                // ticket update
                 ResultSet resultSet1 = statement
                         .executeQuery("SELECT id, `name`, title, descript, status" + " FROM tickets" + " ORDER BY id;");
                 System.out.println();
@@ -91,7 +93,7 @@ public class App {
                 System.out.print("Please choose new status  : ");
                 String status = scanner.nextLine();
 
-                if (status == "Resolved") {
+                if (status.equals("Resolved")) {
                     statement.executeUpdate("UPDATE tickets SET status = '" + status
                             + "', resolution = CURRENT_TIMESTAMP() WHERE id = " + id);
                 } else {
@@ -99,29 +101,49 @@ public class App {
                 }
 
             } else if (option == 4) {
-                // reolution time
-                ResultSet resultSet3 = statement.executeQuery(
-                        "SELECT id, (IFNULL(resolution, CURRENT_TIMESTAMP()) - created) AS resolutionTime FROM tickets;");
-                    while (resultSet3.next()) {
-                        int id = resultSet3.getInt("id");
-                        Timestamp resolutionTime = resultSet3.getTimestamp("resolutionTime");
-
-                System.out.println(id + " '" + resolutionTime);
-
-                // statusi
-                ResultSet resultset2 = statement.executeQuery("SELECT status, COUNT(*) FROM tickets GROUP BY status;");
-                while (resultset2.next()) {
-                    String status = resultset2.getString("status");
-                    int count = resultset2.getInt("COUNT(*)");
-                    System.out.println(status + " " + count);
-                }
-
+                // total ticket count
                 ResultSet resultset4 = statement.executeQuery("SELECT COUNT(*) FROM tickets;");
                 while (resultset4.next()) {
-                    int count = resultset4.getInt("COUNT(*)");
-                    System.out.println("Total ticket count:" + " " + count);
+                    int countOfTickets = resultset4.getInt("COUNT(*)");
+                    System.out.println();
+                    System.out.println("Total ticket count:" + " " + countOfTickets);
+                }
+                // count by status
+                ResultSet resultset2 = statement.executeQuery("SELECT status, COUNT(*) FROM tickets GROUP BY status;");
+                int resolvedcount = 0;
+                while (resultset2.next()) {
+                    String status = resultset2.getString("status");
+                    int countOfStatus = resultset2.getInt("COUNT(*)");
+                    System.out.println("Total tickets " + "'" + status + "'" + " " + countOfStatus);
+                    if (resultset2.getString("status").equals("Resolved")) {
+                        resolvedcount++;
+                    }
+                }
+                // resolution time
+                ResultSet resultSet3 = statement.executeQuery(
+                        "SELECT id, TIMESTAMPDIFF (MINUTE, created, IFNULL(resolution, CURRENT_TIMESTAMP())) AS resolutionTime FROM tickets WHERE resolution IS NOT NULL;");
+                // ResultSet results = statement
+                // .executeQuery("SELECT COUNT(*) FROM tickets WHERE status LIKE '%Resolved%'");
+
+                System.out.println();
+                System.out.println("Resolution time for resolved tickets:");
+                int total = 0;
+                while (resultSet3.next()) {
+                    int id = resultSet3.getInt("id");
+                    Long resolutionTime = resultSet3.getLong("resolutionTime");
+                    total = (int) (total + resolutionTime);
+                    System.out.println("- Ticket # " + id + " resolved in " + resolutionTime + " minutes");
                 }
 
+                int average = total / resolvedcount;
+                System.out.println("Average ticket resolving time:" + average);
+                // ResultSet resultSet4 = statement.executeQuery(
+                // "SELECT TIME_FORMAT(avg(cast(resolution as time)),'%h:%i:%s %p') as
+                // resolutionTime from tickets where resolution IS NOT NULL");
+                // while (resultSet4.next()) {
+                // var resolutionTime = resultSet4.getObject("resolutionTime");
+                // System.out.println(resolutionTime);
+                // }
             } else if (option == 5) {
                 System.out.println("Thank you for using this ticket system!");
                 System.exit(0);
@@ -132,8 +154,8 @@ public class App {
         catch (
 
         Exception e) {
-            System.out.println("Something went wrong.");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println(e);
         }
 
     }
